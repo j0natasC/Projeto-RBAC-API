@@ -13,24 +13,29 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+        private final UserRepository userRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+        public CustomUserDetailsService(UserRepository userRepository) {
+                this.userRepository = userRepository;
+        }
 
-    @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
+        @Override
+        public UserDetails loadUserByUsername(String username)
+                        throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+                User user = userRepository.findByUsername(username)
+                                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                user.getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
-                        .collect(Collectors.toSet()));
-    }
+                var authorities = user.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+                                .collect(Collectors.toSet());
+
+                authorities.addAll(
+                                user.getRoles().stream()
+                                                .flatMap(role -> role.getPermissions().stream())
+                                                .map(p -> new SimpleGrantedAuthority(p.getName()))
+                                                .toList());
+                return null;
+
+        }
 }
