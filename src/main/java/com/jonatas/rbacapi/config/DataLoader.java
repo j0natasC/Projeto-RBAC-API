@@ -22,7 +22,6 @@ public class DataLoader {
                         PasswordEncoder passwordEncoder) {
                 return args -> {
 
-                        // -------- PERMISSIONS --------
                         Permission create = permissionRepository.findByName("CREATE_USER")
                                         .orElseGet(() -> permissionRepository.save(new Permission("CREATE_USER")));
 
@@ -32,7 +31,6 @@ public class DataLoader {
                         Permission delete = permissionRepository.findByName("DELETE_USER")
                                         .orElseGet(() -> permissionRepository.save(new Permission("DELETE_USER")));
 
-                        // -------- ROLE ADMIN --------
                         Role adminRole = roleRepository.findByName("ADMIN")
                                         .orElseGet(() -> {
                                                 Role admin = new Role("ADMIN");
@@ -42,7 +40,6 @@ public class DataLoader {
                                                 return roleRepository.save(admin);
                                         });
 
-                        // -------- USER ADMIN --------
                         if (userRepository.findByUsername("admin").isEmpty()) {
                                 User admin = new User();
                                 admin.setUsername("admin");

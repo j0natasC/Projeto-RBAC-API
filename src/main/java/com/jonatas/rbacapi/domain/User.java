@@ -56,8 +56,8 @@ public class User {
         this.password = password;
     }
 
-    public @Nullable String getPassword() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+    public String getPassword() {
+        return password;
     }
+
 }
