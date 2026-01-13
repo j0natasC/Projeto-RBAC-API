@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
@@ -19,9 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 this.userRepository = userRepository;
         }
 
+        @Transactional
         @Override
-        public UserDetails loadUserByUsername(String username)
-                        throws UsernameNotFoundException {
+        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
                 User user = userRepository.findByUsername(username)
                                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
@@ -32,10 +33,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
                 authorities.addAll(
                                 user.getRoles().stream()
+                                                .filter(role -> role.getPermissions() != null)
                                                 .flatMap(role -> role.getPermissions().stream())
                                                 .map(p -> new SimpleGrantedAuthority(p.getName()))
                                                 .toList());
-                return null;
 
+                return new org.springframework.security.core.userdetails.User(
+                                user.getUsername(),
+                                user.getPassword(),
+                                authorities);
         }
 }
