@@ -116,8 +116,8 @@ Este projeto foi desenvolvido com foco em:
 
 **Jonatas Cavalcante**
 
-* GitHub: [https://github.com/seu-usuario](https://github.com/seu-usuario)
-* LinkedIn: [https://www.linkedin.com/in/seu-perfil](https://www.linkedin.com/in/seu-perfil)
+* GitHub:  https://github.com/seu-usuario)](https://github.com/j0natasC
+* LinkedIn: https://www.linkedin.com/in/jonatas-cavalcante/
 
 ---
 
